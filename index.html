@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Трекер активности</title>
+<meta name="theme-color" content="#0A0E12" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Трекер" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; background: #0A0E12; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    color: #EFF3F6;
+    padding: env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 16px);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 420px; margin: 0 auto; padding-top: 18px; }
+  .eyebrow { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #6E7A86; font-weight: 600; margin: 0; }
+  .date { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; margin: 2px 0 0; text-transform: capitalize; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+  .icon-btn { background: #12171D; border: 1px solid #222B33; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: #6E7A86; cursor: pointer; }
+  .ring-wrap { display: flex; justify-content: center; margin-bottom: 22px; position: relative; }
+  .ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .ring-steps { font-size: 34px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .ring-sub { font-size: 12px; color: #6E7A86; margin-top: 4px; }
+  .row-btns { display: flex; gap: 8px; margin-bottom: 22px; }
+  .add-btn { flex: 1; background: #12171D; border: 1px solid #222B33; border-radius: 12px; padding: 10px 0; color: #EFF3F6; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .add-btn:active { transform: scale(0.97); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stat-card { background: #12171D; border: 1px solid #222B33; border-radius: 16px; padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; }
+  .stat-top { display: flex; align-items: center; justify-content: space-between; }
+  .mini-add { background: transparent; border: 1px solid #222B33; border-radius: 8px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: #6E7A86; cursor: pointer; padding: 0; }
+  .stat-value { font-size: 19px; font-weight: 800; line-height: 1; }
+  .stat-label { font-size: 10.5px; color: #6E7A86; margin-top: 3px; }
+  .stat-bar-bg { height: 4px; border-radius: 4px; background: #1A2129; overflow: hidden; }
+  .stat-bar-fill { height: 100%; border-radius: 4px; }
+  .chart-card { background: #12171D; border: 1px solid #222B33; border-radius: 16px; padding: 16px 14px 10px; margin-bottom: 16px; }
+  .chart-title { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; font-size: 12.5px; font-weight: 600; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 90px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .bar { width: 100%; max-width: 26px; border-radius: 5px 5px 0 0; background: #1A2129; transition: height 0.3s; }
+  .bar.today { background: #C6FF3D; }
+  .bar-label { font-size: 11px; color: #6E7A86; margin-top: 6px; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #C6FF3D; color: #0A0E12; font-weight: 700; font-size: 12.5px; padding: 8px 16px; border-radius: 999px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 50; }
+  .toast.show { opacity: 1; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(8,10,12,0.78); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #12171D; border: 1px solid #222B33; border-radius: 18px; padding: 20px; width: 100%; max-width: 360px; }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .modal-head span { font-weight: 700; font-size: 15px; }
+  .modal-close { background: transparent; border: none; color: #6E7A86; cursor: pointer; font-size: 18px; }
+  .goal-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .goal-row span { font-size: 13px; color: #6E7A86; }
+  .goal-row input { width: 80px; background: #1A2129; border: 1px solid #222B33; border-radius: 8px; color: #EFF3F6; padding: 6px 8px; font-size: 13px; text-align: right; }
+  .modal-done { width: 100%; margin-top: 4px; background: #C6FF3D; border: none; border-radius: 10px; padding: 10px 0; color: #0A0E12; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .install-hint { background: #12171D; border: 1px solid #222B33; border-radius: 14px; padding: 12px 14px; font-size: 12.5px; color: #6E7A86; margin-bottom: 18px; line-height: 1.5; display: none; }
+  .install-hint.show { display: block; }
+  .install-hint b { color: #EFF3F6; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="install-hint" id="installHint">
+    <b>Установить на главный экран:</b> нажмите кнопку «Поделиться» внизу Safari, затем «На экран «Домой»».
+  </div>
+
+  <div class="header">
+    <div>
+      <p class="eyebrow">Сегодня</p>
+      <p class="date" id="dateLabel"></p>
+    </div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Настройки целей">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+
+  <div class="ring-wrap">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#1A2129" stroke-width="14"/>
+      <circle id="stepRing" cx="100" cy="100" r="84" fill="none" stroke="#C6FF3D" stroke-width="14" stroke-linecap="round" transform="rotate(-90 100 100)" style="transition: stroke-dashoffset 0.5s ease;"/>
+    </svg>
+    <div class="ring-center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6FF3D" stroke-width="2" style="margin: 0 auto 4px;"><path d="M4 16v-2a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4"/><path d="M12 16v-2a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v2"/></svg>
+      <div class="ring-steps" id="stepsValue">0</div>
+      <div class="ring-sub" id="stepsGoalLabel">из 10 000 шагов</div>
+    </div>
+  </div>
+
+  <div class="row-btns">
+    <button class="add-btn" data-add-steps="1000">+ 1 000</button>
+    <button class="add-btn" data-add-steps="2000">+ 2 000</button>
+    <button class="add-btn" data-add-steps="5000">+ 5 000</button>
+  </div>
+
+  <div class="stats" id="statsGrid"></div>
+
+  <div class="chart-card">
+    <div class="chart-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6FF3D" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Шаги за неделю
+    </div>
+    <div class="chart-bars" id="chartBars"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <span>Дневные цели</span>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div id="goalsForm"></div>
+    <button class="modal-done" id="modalDone">Готово</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'fitness-tracker-data';
+const DAY_LABELS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const STAT_DEFS = [
+  { key: 'calories', label: 'Калории', unit: 'ккал', color: '#FF4D2E', step: 50,
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D2E" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>' },
+  { key: 'water', label: 'Вода', unit: 'стак.', color: '#3DB7FF', step: 1,
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3DB7FF" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>' },
+  { key: 'active', label: 'Активность', unit: 'мин', color: '#C6FF3D', step: 10,
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6FF3D" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+];
+const DEFAULT_GOALS = { steps: 10000, calories: 600, water: 8, active: 45 };
+
+function todayKey(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() - offset);
+  return d.toISOString().slice(0, 10);
+}
+function emptyWeek() {
+  const week = {};
+  for (let i = 6; i >= 0; i--) week[todayKey(i)] = { steps: 0, calories: 0, water: 0, active: 0 };
+  return week;
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { week: emptyWeek(), goals: { ...DEFAULT_GOALS } };
+    const parsed = JSON.parse(raw);
+    return {
+      week: { ...emptyWeek(), ...(parsed.week || {}) },
+      goals: { ...DEFAULT_GOALS, ...(parsed.goals || {}) },
+    };
+  } catch (e) {
+    return { week: emptyWeek(), goals: { ...DEFAULT_GOALS } };
+  }
+}
+function save(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+let state = load();
+const today = todayKey(0);
+
+function ensureToday() {
+  if (!state.week[today]) state.week[today] = { steps: 0, calories: 0, water: 0, active: 0 };
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => t.classList.remove('show'), 1300);
+}
+
+function render() {
+  ensureToday();
+  const data = state.week[today];
+  const goals = state.goals;
+
+  document.getElementById('dateLabel').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  // ring
+  const r = 84, circumference = 2 * Math.PI * r;
+  const pct = Math.min(100, Math.round((data.steps / goals.steps) * 100));
+  const ring = document.getElementById('stepRing');
+  ring.setAttribute('stroke-dasharray', circumference);
+  ring.setAttribute('stroke-dashoffset', circumference * (1 - pct / 100));
+  document.getElementById('stepsValue').textContent = data.steps.toLocaleString('ru-RU');
+  document.getElementById('stepsGoalLabel').textContent = `из ${goals.steps.toLocaleString('ru-RU')} шагов`;
+
+  // stat cards
+  const grid = document.getElementById('statsGrid');
+  grid.innerHTML = '';
+  STAT_DEFS.forEach(def => {
+    const value = data[def.key] || 0;
+    const goal = goals[def.key];
+    const p = Math.min(100, Math.round((value / goal) * 100));
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    card.innerHTML = `
+      <div class="stat-top">
+        ${def.icon}
+        <button class="mini-add" data-add-key="${def.key}" data-add-amount="${def.step}" data-add-label="${def.label}" data-add-unit="${def.unit}" aria-label="Добавить ${def.label}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+      <div>
+        <div class="stat-value">${value}</div>
+        <div class="stat-label">${def.label} · ${def.unit}</div>
+      </div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${p}%; background:${def.color}"></div></div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // chart
+  const bars = document.getElementById('chartBars');
+  bars.innerHTML = '';
+  const keys = Object.keys(state.week).sort();
+  const maxSteps = Math.max(...keys.map(k => state.week[k].steps), goals.steps, 1);
+  keys.forEach(k => {
+    const d = new Date(k);
+    const label = DAY_LABELS[(d.getDay() + 6) % 7];
+    const steps = state.week[k].steps;
+    const isToday = k === today;
+    const h = Math.max(3, Math.round((steps / maxSteps) * 90));
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.innerHTML = `<div class="bar ${isToday ? 'today' : ''}" style="height:${h}px"></div><div class="bar-label">${label}</div>`;
+    bars.appendChild(col);
+  });
+
+  // goals modal
+  const form = document.getElementById('goalsForm');
+  form.innerHTML = '';
+  const goalDefs = [
+    { key: 'steps', label: 'Шаги' },
+    { key: 'calories', label: 'Калории' },
+    { key: 'water', label: 'Стаканы воды' },
+    { key: 'active', label: 'Минуты активности' },
+  ];
+  goalDefs.forEach(g => {
+    const row = document.createElement('div');
+    row.className = 'goal-row';
+    row.innerHTML = `<span>${g.label}</span><input type="number" min="1" value="${goals[g.key]}" data-goal-key="${g.key}" />`;
+    form.appendChild(row);
+  });
+}
+
+document.addEventListener('click', (e) => {
+  const stepBtn = e.target.closest('[data-add-steps]');
+  if (stepBtn) {
+    const n = parseInt(stepBtn.dataset.addSteps, 10);
+    ensureToday();
+    state.week[today].steps += n;
+    save(state);
+    render();
+    showToast(`+${n.toLocaleString('ru-RU')} шагов`);
+    return;
+  }
+  const miniBtn = e.target.closest('[data-add-key]');
+  if (miniBtn) {
+    const key = miniBtn.dataset.addKey;
+    const amount = parseInt(miniBtn.dataset.addAmount, 10);
+    const unit = miniBtn.dataset.addUnit;
+    ensureToday();
+    state.week[today][key] = Math.max(0, (state.week[today][key] || 0) + amount);
+    save(state);
+    render();
+    showToast(`+${amount} ${unit}`);
+    return;
+  }
+});
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.add('show');
+});
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('show');
+});
+document.getElementById('modalDone').addEventListener('click', () => {
+  document.querySelectorAll('[data-goal-key]').forEach(input => {
+    const key = input.dataset.goalKey;
+    const val = Math.max(1, parseInt(input.value || '1', 10));
+    state.goals[key] = val;
+  });
+  save(state);
+  render();
+  document.getElementById('modalOverlay').classList.remove('show');
+});
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') e.target.classList.remove('show');
+});
+
+// install hint only when running in Safari browser (not already standalone)
+const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+if (isIOS && !isStandalone) {
+  document.getElementById('installHint').classList.add('show');
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+render();
+</script>
+</body>
+</html>
