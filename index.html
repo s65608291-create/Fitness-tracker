@@ -32,7 +32,7 @@
   .row-btns { display: flex; gap: 8px; margin-bottom: 22px; }
   .add-btn { flex: 1; background: #12171D; border: 1px solid #222B33; border-radius: 12px; padding: 10px 0; color: #EFF3F6; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
   .add-btn:active { transform: scale(0.97); }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
   .stat-card { background: #12171D; border: 1px solid #222B33; border-radius: 16px; padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; }
   .stat-top { display: flex; align-items: center; justify-content: space-between; }
   .mini-add { background: transparent; border: 1px solid #222B33; border-radius: 8px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: #6E7A86; cursor: pointer; padding: 0; }
@@ -40,7 +40,8 @@
   .stat-label { font-size: 10.5px; color: #6E7A86; margin-top: 3px; }
   .stat-bar-bg { height: 4px; border-radius: 4px; background: #1A2129; overflow: hidden; }
   .stat-bar-fill { height: 100%; border-radius: 4px; }
-  .chart-card { background: #12171D; border: 1px solid #222B33; border-radius: 16px; padding: 16px 14px 10px; margin-bottom: 16px; }
+  .section-title { font-size: 16px; font-weight: 700; margin: 26px 0 12px; }
+  .card { background: #12171D; border: 1px solid #222B33; border-radius: 16px; padding: 16px 14px; margin-bottom: 16px; }
   .chart-title { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; font-size: 12.5px; font-weight: 600; }
   .chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 90px; }
   .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
@@ -51,18 +52,60 @@
   .toast.show { opacity: 1; }
   .modal-overlay { position: fixed; inset: 0; background: rgba(8,10,12,0.78); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
   .modal-overlay.show { display: flex; }
-  .modal { background: #12171D; border: 1px solid #222B33; border-radius: 18px; padding: 20px; width: 100%; max-width: 360px; }
+  .modal { background: #12171D; border: 1px solid #222B33; border-radius: 18px; padding: 20px; width: 100%; max-width: 360px; max-height: 85vh; overflow-y: auto; }
   .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .modal-head span { font-weight: 700; font-size: 15px; }
   .modal-close { background: transparent; border: none; color: #6E7A86; cursor: pointer; font-size: 18px; }
   .goal-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .goal-row span { font-size: 13px; color: #6E7A86; }
   .goal-row input { width: 80px; background: #1A2129; border: 1px solid #222B33; border-radius: 8px; color: #EFF3F6; padding: 6px 8px; font-size: 13px; text-align: right; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; color: #6E7A86; margin-bottom: 5px; }
+  .field input { width: 100%; background: #1A2129; border: 1px solid #222B33; border-radius: 8px; color: #EFF3F6; padding: 9px 10px; font-size: 14px; }
   .modal-done { width: 100%; margin-top: 4px; background: #C6FF3D; border: none; border-radius: 10px; padding: 10px 0; color: #0A0E12; font-weight: 700; font-size: 13px; cursor: pointer; }
   .install-hint { background: #12171D; border: 1px solid #222B33; border-radius: 14px; padding: 12px 14px; font-size: 12.5px; color: #6E7A86; margin-bottom: 18px; line-height: 1.5; display: none; }
   .install-hint.show { display: block; }
   .install-hint b { color: #EFF3F6; }
   svg { display: block; }
+
+  /* fasting card */
+  .scheme-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .scheme-btn { flex: 1; min-width: 64px; background: #1A2129; border: 1px solid #222B33; border-radius: 10px; padding: 8px 0; color: #EFF3F6; font-size: 12.5px; font-weight: 600; cursor: pointer; text-align: center; }
+  .scheme-btn.active { background: #C6FF3D; color: #0A0E12; border-color: #C6FF3D; }
+  .custom-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .custom-row .field { flex: 1; margin-bottom: 0; }
+  .fast-status { text-align: center; margin-bottom: 14px; }
+  .fast-phase-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .fast-phase-label.fasting { color: #FF4D2E; }
+  .fast-phase-label.eating { color: #3DB7FF; }
+  .fast-phase-label.idle { color: #6E7A86; }
+  .fast-timer { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin: 6px 0; }
+  .fast-sub { font-size: 12px; color: #6E7A86; }
+  .fast-progress-bg { height: 8px; border-radius: 8px; background: #1A2129; overflow: hidden; margin-bottom: 14px; }
+  .fast-progress-fill { height: 100%; border-radius: 8px; transition: width 0.5s; }
+  .fast-action-btn { width: 100%; border: none; border-radius: 10px; padding: 12px 0; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+  .fast-action-btn.start { background: #FF4D2E; color: #fff; }
+  .fast-action-btn.end { background: #C6FF3D; color: #0A0E12; }
+
+  /* macros */
+  .macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .macro-item { text-align: center; }
+  .macro-ring-wrap { position: relative; width: 64px; height: 64px; margin: 0 auto 6px; }
+  .macro-val { font-size: 12px; font-weight: 700; }
+  .macro-name { font-size: 10.5px; color: #6E7A86; margin-top: 2px; }
+  .kcal-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .kcal-val { font-size: 26px; font-weight: 800; }
+  .kcal-goal { font-size: 12px; color: #6E7A86; }
+
+  /* food log */
+  .add-food-btn { width: 100%; background: #1A2129; border: 1px dashed #2A343D; border-radius: 12px; padding: 12px 0; color: #C6FF3D; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .food-entry { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1A2129; }
+  .food-entry:last-child { border-bottom: none; }
+  .food-name { font-size: 13.5px; font-weight: 600; }
+  .food-macro { font-size: 11px; color: #6E7A86; margin-top: 2px; }
+  .food-kcal { font-size: 14px; font-weight: 700; color: #C6FF3D; }
+  .food-del { background: transparent; border: none; color: #6E7A86; cursor: pointer; padding: 4px 0 4px 10px; }
+  .empty-state { text-align: center; color: #6E7A86; font-size: 12.5px; padding: 14px 0; }
 </style>
 </head>
 <body>
@@ -102,7 +145,7 @@
 
   <div class="stats" id="statsGrid"></div>
 
-  <div class="chart-card">
+  <div class="card">
     <div class="chart-title">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6FF3D" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
       Шаги за неделю
@@ -110,10 +153,48 @@
     <div class="chart-bars" id="chartBars"></div>
   </div>
 
+  <!-- FASTING -->
+  <div class="section-title">Интервальное голодание</div>
+  <div class="card">
+    <div class="scheme-row" id="schemeRow"></div>
+    <div class="custom-row" id="customRow" style="display:none;">
+      <div class="field"><label>Часы голодания</label><input type="number" id="customFastH" min="1" max="23" value="16" /></div>
+      <div class="field"><label>Часы окна еды</label><input type="number" id="customEatH" min="1" max="23" value="8" /></div>
+    </div>
+    <div class="fast-status">
+      <div class="fast-phase-label" id="fastPhaseLabel">Не начато</div>
+      <div class="fast-timer" id="fastTimer">--:--:--</div>
+      <div class="fast-sub" id="fastSub">Выберите схему и начните голодание</div>
+    </div>
+    <div class="fast-progress-bg"><div class="fast-progress-fill" id="fastProgressFill" style="width:0%"></div></div>
+    <button class="fast-action-btn start" id="fastActionBtn">Начать голодание</button>
+  </div>
+
+  <!-- NUTRITION -->
+  <div class="section-title">Питание</div>
+  <div class="card">
+    <div class="kcal-row">
+      <span class="kcal-val" id="kcalValue">0</span>
+      <span class="kcal-goal" id="kcalGoalLabel">из 2000 ккал</span>
+    </div>
+    <div class="stat-bar-bg"><div class="stat-bar-fill" id="kcalBarFill" style="background:#FF4D2E"></div></div>
+    <div class="macro-grid" id="macroGrid"></div>
+    <button class="add-food-btn" id="addFoodBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Добавить приём пищи
+    </button>
+  </div>
+
+  <div class="card" id="foodLogCard">
+    <div class="chart-title">Сегодняшний журнал</div>
+    <div id="foodLogList"></div>
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- GOALS MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-head">
@@ -125,18 +206,45 @@
   </div>
 </div>
 
+<!-- FOOD MODAL -->
+<div class="modal-overlay" id="foodModalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <span>Добавить приём пищи</span>
+      <button class="modal-close" id="foodModalClose">✕</button>
+    </div>
+    <div class="field"><label>Название</label><input type="text" id="foodName" placeholder="Например, овсянка с ягодами" /></div>
+    <div class="field"><label>Калории, ккал</label><input type="number" id="foodKcal" min="0" /></div>
+    <div class="field"><label>Белки, г</label><input type="number" id="foodProtein" min="0" /></div>
+    <div class="field"><label>Жиры, г</label><input type="number" id="foodFat" min="0" /></div>
+    <div class="field"><label>Углеводы, г</label><input type="number" id="foodCarb" min="0" /></div>
+    <button class="modal-done" id="foodModalSave">Добавить</button>
+  </div>
+</div>
+
 <script>
 const STORAGE_KEY = 'fitness-tracker-data';
 const DAY_LABELS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 const STAT_DEFS = [
-  { key: 'calories', label: 'Калории', unit: 'ккал', color: '#FF4D2E', step: 50,
-    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D2E" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>' },
   { key: 'water', label: 'Вода', unit: 'стак.', color: '#3DB7FF', step: 1,
     icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3DB7FF" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>' },
   { key: 'active', label: 'Активность', unit: 'мин', color: '#C6FF3D', step: 10,
     icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6FF3D" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+  { key: 'kcalSummary', label: 'Калории', unit: 'ккал', color: '#FF4D2E', step: 0,
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D2E" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>' },
 ];
-const DEFAULT_GOALS = { steps: 10000, calories: 600, water: 8, active: 45 };
+const MACRO_DEFS = [
+  { key: 'protein', label: 'Белки', color: '#3DB7FF' },
+  { key: 'fat', label: 'Жиры', color: '#FAC775' },
+  { key: 'carb', label: 'Углеводы', color: '#C6FF3D' },
+];
+const SCHEMES = [
+  { key: '16:8', fastH: 16, eatH: 8 },
+  { key: '18:6', fastH: 18, eatH: 6 },
+  { key: '20:4', fastH: 20, eatH: 4 },
+  { key: 'custom', fastH: 16, eatH: 8 },
+];
+const DEFAULT_GOALS = { steps: 10000, water: 8, active: 45, calories: 2000, protein: 120, fat: 65, carb: 230 };
 
 function todayKey(offset = 0) {
   const d = new Date();
@@ -145,21 +253,31 @@ function todayKey(offset = 0) {
 }
 function emptyWeek() {
   const week = {};
-  for (let i = 6; i >= 0; i--) week[todayKey(i)] = { steps: 0, calories: 0, water: 0, active: 0 };
+  for (let i = 6; i >= 0; i--) week[todayKey(i)] = { steps: 0, water: 0, active: 0 };
   return week;
 }
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { week: emptyWeek(), goals: { ...DEFAULT_GOALS } };
+    if (!raw) return defaultState();
     const parsed = JSON.parse(raw);
     return {
       week: { ...emptyWeek(), ...(parsed.week || {}) },
       goals: { ...DEFAULT_GOALS, ...(parsed.goals || {}) },
+      foodLog: parsed.foodLog || {},
+      fasting: parsed.fasting || { schemeKey: '16:8', fastH: 16, eatH: 8, phase: 'idle', phaseStart: null },
     };
   } catch (e) {
-    return { week: emptyWeek(), goals: { ...DEFAULT_GOALS } };
+    return defaultState();
   }
+}
+function defaultState() {
+  return {
+    week: emptyWeek(),
+    goals: { ...DEFAULT_GOALS },
+    foodLog: {},
+    fasting: { schemeKey: '16:8', fastH: 16, eatH: 8, phase: 'idle', phaseStart: null },
+  };
 }
 function save(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -169,7 +287,8 @@ let state = load();
 const today = todayKey(0);
 
 function ensureToday() {
-  if (!state.week[today]) state.week[today] = { steps: 0, calories: 0, water: 0, active: 0 };
+  if (!state.week[today]) state.week[today] = { steps: 0, water: 0, active: 0 };
+  if (!state.foodLog[today]) state.foodLog[today] = [];
 }
 
 function showToast(msg) {
@@ -180,10 +299,22 @@ function showToast(msg) {
   showToast._timer = setTimeout(() => t.classList.remove('show'), 1300);
 }
 
+function todayFoodTotals() {
+  const entries = state.foodLog[today] || [];
+  return entries.reduce((acc, e) => {
+    acc.kcal += e.kcal || 0;
+    acc.protein += e.protein || 0;
+    acc.fat += e.fat || 0;
+    acc.carb += e.carb || 0;
+    return acc;
+  }, { kcal: 0, protein: 0, fat: 0, carb: 0 });
+}
+
 function render() {
   ensureToday();
   const data = state.week[today];
   const goals = state.goals;
+  const foodTotals = todayFoodTotals();
 
   document.getElementById('dateLabel').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
 
@@ -200,17 +331,24 @@ function render() {
   const grid = document.getElementById('statsGrid');
   grid.innerHTML = '';
   STAT_DEFS.forEach(def => {
-    const value = data[def.key] || 0;
-    const goal = goals[def.key];
+    let value, goal, addable = true;
+    if (def.key === 'kcalSummary') {
+      value = Math.round(foodTotals.kcal);
+      goal = goals.calories;
+      addable = false;
+    } else {
+      value = data[def.key] || 0;
+      goal = goals[def.key];
+    }
     const p = Math.min(100, Math.round((value / goal) * 100));
     const card = document.createElement('div');
     card.className = 'stat-card';
     card.innerHTML = `
       <div class="stat-top">
         ${def.icon}
-        <button class="mini-add" data-add-key="${def.key}" data-add-amount="${def.step}" data-add-label="${def.label}" data-add-unit="${def.unit}" aria-label="Добавить ${def.label}">
+        ${addable ? `<button class="mini-add" data-add-key="${def.key}" data-add-amount="${def.step}" data-add-label="${def.label}" data-add-unit="${def.unit}" aria-label="Добавить ${def.label}">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
+        </button>` : ''}
       </div>
       <div>
         <div class="stat-value">${value}</div>
@@ -238,14 +376,69 @@ function render() {
     bars.appendChild(col);
   });
 
+  // nutrition summary
+  document.getElementById('kcalValue').textContent = Math.round(foodTotals.kcal);
+  document.getElementById('kcalGoalLabel').textContent = `из ${goals.calories.toLocaleString('ru-RU')} ккал`;
+  document.getElementById('kcalBarFill').style.width = Math.min(100, Math.round((foodTotals.kcal / goals.calories) * 100)) + '%';
+
+  const macroGrid = document.getElementById('macroGrid');
+  macroGrid.innerHTML = '';
+  MACRO_DEFS.forEach(m => {
+    const value = Math.round(foodTotals[m.key]);
+    const goal = goals[m.key];
+    const p = Math.min(100, Math.round((value / goal) * 100));
+    const circumferenceM = 2 * Math.PI * 26;
+    const offset = circumferenceM * (1 - p / 100);
+    const item = document.createElement('div');
+    item.className = 'macro-item';
+    item.innerHTML = `
+      <div class="macro-ring-wrap">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="26" fill="none" stroke="#1A2129" stroke-width="7"/>
+          <circle cx="32" cy="32" r="26" fill="none" stroke="${m.color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${circumferenceM}" stroke-dashoffset="${offset}" transform="rotate(-90 32 32)"/>
+        </svg>
+        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+          <span class="macro-val">${value}г</span>
+        </div>
+      </div>
+      <div class="macro-name">${m.label}</div>
+    `;
+    macroGrid.appendChild(item);
+  });
+
+  // food log list
+  const foodList = document.getElementById('foodLogList');
+  const entries = state.foodLog[today] || [];
+  if (entries.length === 0) {
+    foodList.innerHTML = '<div class="empty-state">Пока пусто — добавьте первый приём пищи.</div>';
+  } else {
+    foodList.innerHTML = entries.map(e => `
+      <div class="food-entry">
+        <div>
+          <div class="food-name">${escapeHtml(e.name)}</div>
+          <div class="food-macro">Б ${e.protein || 0}г · Ж ${e.fat || 0}г · У ${e.carb || 0}г</div>
+        </div>
+        <div style="display:flex; align-items:center;">
+          <div class="food-kcal">${e.kcal} ккал</div>
+          <button class="food-del" data-del-food="${e.id}" aria-label="Удалить">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
   // goals modal
   const form = document.getElementById('goalsForm');
   form.innerHTML = '';
   const goalDefs = [
     { key: 'steps', label: 'Шаги' },
-    { key: 'calories', label: 'Калории' },
     { key: 'water', label: 'Стаканы воды' },
     { key: 'active', label: 'Минуты активности' },
+    { key: 'calories', label: 'Калории, ккал' },
+    { key: 'protein', label: 'Белки, г' },
+    { key: 'fat', label: 'Жиры, г' },
+    { key: 'carb', label: 'Углеводы, г' },
   ];
   goalDefs.forEach(g => {
     const row = document.createElement('div');
@@ -253,8 +446,174 @@ function render() {
     row.innerHTML = `<span>${g.label}</span><input type="number" min="1" value="${goals[g.key]}" data-goal-key="${g.key}" />`;
     form.appendChild(row);
   });
+
+  renderFasting();
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ---- FASTING ----
+function renderSchemeButtons() {
+  const row = document.getElementById('schemeRow');
+  row.innerHTML = '';
+  SCHEMES.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'scheme-btn' + (state.fasting.schemeKey === s.key ? ' active' : '');
+    btn.textContent = s.key === 'custom' ? 'Свой' : s.key;
+    btn.dataset.scheme = s.key;
+    row.appendChild(btn);
+  });
+  document.getElementById('customRow').style.display = state.fasting.schemeKey === 'custom' ? 'flex' : 'none';
+  if (state.fasting.schemeKey === 'custom') {
+    document.getElementById('customFastH').value = state.fasting.fastH;
+    document.getElementById('customEatH').value = state.fasting.eatH;
+  }
+}
+
+function renderFasting() {
+  renderSchemeButtons();
+  const f = state.fasting;
+  const label = document.getElementById('fastPhaseLabel');
+  const timer = document.getElementById('fastTimer');
+  const sub = document.getElementById('fastSub');
+  const fill = document.getElementById('fastProgressFill');
+  const actionBtn = document.getElementById('fastActionBtn');
+
+  if (f.phase === 'idle' || !f.phaseStart) {
+    label.textContent = 'Не начато';
+    label.className = 'fast-phase-label idle';
+    timer.textContent = '--:--:--';
+    sub.textContent = `Схема ${f.schemeKey === 'custom' ? f.fastH + ':' + f.eatH : f.schemeKey} — нажмите, чтобы начать`;
+    fill.style.width = '0%';
+    fill.style.background = '#6E7A86';
+    actionBtn.textContent = 'Начать голодание';
+    actionBtn.className = 'fast-action-btn start';
+    return;
+  }
+
+  const totalH = f.phase === 'fasting' ? f.fastH : f.eatH;
+  const start = new Date(f.phaseStart).getTime();
+  const totalMs = totalH * 3600 * 1000;
+  const elapsedMs = Date.now() - start;
+  const remainMs = totalMs - elapsedMs;
+  const pct = Math.max(0, Math.min(100, Math.round((elapsedMs / totalMs) * 100)));
+
+  fill.style.width = pct + '%';
+
+  if (f.phase === 'fasting') {
+    label.textContent = 'Голодание';
+    label.className = 'fast-phase-label fasting';
+    fill.style.background = '#FF4D2E';
+    actionBtn.textContent = 'Завершить голодание';
+    actionBtn.className = 'fast-action-btn end';
+  } else {
+    label.textContent = 'Окно приёма пищи';
+    label.className = 'fast-phase-label eating';
+    fill.style.background = '#3DB7FF';
+    actionBtn.textContent = 'Начать голодание';
+    actionBtn.className = 'fast-action-btn start';
+  }
+
+  if (remainMs <= 0) {
+    timer.textContent = '00:00:00';
+    sub.textContent = f.phase === 'fasting' ? 'Цель достигнута — можно начинать есть' : 'Окно еды закончилось — начните голодание';
+  } else {
+    timer.textContent = formatDuration(remainMs);
+    sub.textContent = f.phase === 'fasting' ? 'до конца голодания' : 'до конца окна еды';
+  }
+}
+
+function formatDuration(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+}
+
+document.getElementById('schemeRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-scheme]');
+  if (!btn) return;
+  const key = btn.dataset.scheme;
+  state.fasting.schemeKey = key;
+  const found = SCHEMES.find(s => s.key === key);
+  if (key !== 'custom') {
+    state.fasting.fastH = found.fastH;
+    state.fasting.eatH = found.eatH;
+  }
+  save(state);
+  renderFasting();
+});
+
+document.getElementById('customFastH').addEventListener('change', (e) => {
+  state.fasting.fastH = Math.max(1, Math.min(23, parseInt(e.target.value || '16', 10)));
+  save(state);
+});
+document.getElementById('customEatH').addEventListener('change', (e) => {
+  state.fasting.eatH = Math.max(1, Math.min(23, parseInt(e.target.value || '8', 10)));
+  save(state);
+});
+
+document.getElementById('fastActionBtn').addEventListener('click', () => {
+  const f = state.fasting;
+  if (f.phase === 'idle' || f.phase === 'eating') {
+    f.phase = 'fasting';
+    f.phaseStart = new Date().toISOString();
+    showToast('Голодание началось');
+  } else {
+    f.phase = 'eating';
+    f.phaseStart = new Date().toISOString();
+    showToast('Окно приёма пищи открыто');
+  }
+  save(state);
+  renderFasting();
+});
+
+setInterval(() => { if (state.fasting.phase !== 'idle') renderFasting(); }, 1000);
+
+// ---- FOOD LOG ----
+document.getElementById('addFoodBtn').addEventListener('click', () => {
+  document.getElementById('foodName').value = '';
+  document.getElementById('foodKcal').value = '';
+  document.getElementById('foodProtein').value = '';
+  document.getElementById('foodFat').value = '';
+  document.getElementById('foodCarb').value = '';
+  document.getElementById('foodModalOverlay').classList.add('show');
+});
+document.getElementById('foodModalClose').addEventListener('click', () => {
+  document.getElementById('foodModalOverlay').classList.remove('show');
+});
+document.getElementById('foodModalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'foodModalOverlay') e.target.classList.remove('show');
+});
+document.getElementById('foodModalSave').addEventListener('click', () => {
+  const name = document.getElementById('foodName').value.trim() || 'Без названия';
+  const kcal = Math.max(0, parseInt(document.getElementById('foodKcal').value || '0', 10));
+  const protein = Math.max(0, parseInt(document.getElementById('foodProtein').value || '0', 10));
+  const fat = Math.max(0, parseInt(document.getElementById('foodFat').value || '0', 10));
+  const carb = Math.max(0, parseInt(document.getElementById('foodCarb').value || '0', 10));
+  ensureToday();
+  state.foodLog[today].push({ id: Date.now().toString(36), name, kcal, protein, fat, carb });
+  save(state);
+  render();
+  document.getElementById('foodModalOverlay').classList.remove('show');
+  showToast('Приём пищи добавлен');
+});
+
+document.getElementById('foodLogList').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-del-food]');
+  if (!btn) return;
+  const id = btn.dataset.delFood;
+  state.foodLog[today] = (state.foodLog[today] || []).filter(e2 => e2.id !== id);
+  save(state);
+  render();
+});
+
+// ---- existing quick-add handlers ----
 document.addEventListener('click', (e) => {
   const stepBtn = e.target.closest('[data-add-steps]');
   if (stepBtn) {
@@ -271,6 +630,7 @@ document.addEventListener('click', (e) => {
     const key = miniBtn.dataset.addKey;
     const amount = parseInt(miniBtn.dataset.addAmount, 10);
     const unit = miniBtn.dataset.addUnit;
+    if (!amount) return;
     ensureToday();
     state.week[today][key] = Math.max(0, (state.week[today][key] || 0) + amount);
     save(state);
